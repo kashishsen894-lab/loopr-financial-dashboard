@@ -1,0 +1,133 @@
+{
+  "info": {
+    "name": "Loopr Financial Analytics Dashboard API",
+    "description": "API collection for the Financial Analytics Dashboard assignment. Includes auth, transactions, summary, and CSV export endpoints.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    {
+      "key": "base_url",
+      "value": "https://loopr-financial-dashboard.onrender.com/api",
+      "type": "string"
+    },
+    {
+      "key": "token",
+      "value": "",
+      "type": "string"
+    }
+  ],
+  "item": [
+    {
+      "name": "Auth",
+      "item": [
+        {
+          "name": "Login",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"analyst@loopr.ai\",\n  \"password\": \"password123\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/auth/login",
+              "host": ["{{base_url}}"],
+              "path": ["auth", "login"]
+            },
+            "description": "Login with demo credentials. Returns a JWT token to use in subsequent requests."
+          },
+          "response": []
+        },
+        {
+          "name": "Register",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"newuser@example.com\",\n  \"password\": \"password123\",\n  \"name\": \"New User\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/auth/register",
+              "host": ["{{base_url}}"],
+              "path": ["auth", "register"]
+            },
+            "description": "Register a new user account."
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Transactions",
+      "item": [
+        {
+          "name": "Get Transactions (paginated + filters)",
+          "request": {
+            "method": "GET",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{token}}" }
+            ],
+            "url": {
+              "raw": "{{base_url}}/transactions?page=1&limit=10&sortBy=date&sortOrder=desc",
+              "host": ["{{base_url}}"],
+              "path": ["transactions"],
+              "query": [
+                { "key": "page", "value": "1" },
+                { "key": "limit", "value": "10" },
+                { "key": "sortBy", "value": "date" },
+                { "key": "sortOrder", "value": "desc" },
+                { "key": "category", "value": "Revenue", "disabled": true },
+                { "key": "status", "value": "Paid", "disabled": true },
+                { "key": "search", "value": "", "disabled": true },
+                { "key": "startDate", "value": "", "disabled": true },
+                { "key": "endDate", "value": "", "disabled": true }
+              ]
+            },
+            "description": "Fetch paginated transactions. Supports filtering by category, status, search, and date range. Requires Bearer token."
+          },
+          "response": []
+        },
+        {
+          "name": "Get Summary (charts data)",
+          "request": {
+            "method": "GET",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{token}}" }
+            ],
+            "url": {
+              "raw": "{{base_url}}/transactions/summary",
+              "host": ["{{base_url}}"],
+              "path": ["transactions", "summary"]
+            },
+            "description": "Get aggregated totals and monthly breakdown for dashboard charts. Requires Bearer token."
+          },
+          "response": []
+        },
+        {
+          "name": "Export CSV",
+          "request": {
+            "method": "GET",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{token}}" }
+            ],
+            "url": {
+              "raw": "{{base_url}}/transactions/export?columns=id,date,amount,category,status",
+              "host": ["{{base_url}}"],
+              "path": ["transactions", "export"],
+              "query": [
+                { "key": "columns", "value": "id,date,amount,category,status" }
+              ]
+            },
+            "description": "Export transactions as a CSV file with configurable columns. Requires Bearer token."
+          },
+          "response": []
+        }
+      ]
+    }
+  ]
+}
